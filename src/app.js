@@ -23,27 +23,9 @@ render(<Provider store={store}>
 
 
 // create and dispatch actions
-store.dispatch(createBook(
-    [{
-        id: 1,
-        title: "how to read",
-        description: "this book teaches you how to read",
-        price: 3.50
-    },
-    {
-        id: 2,
-        title: "how to not read",
-        description: "this book teaches you how to not read",
-        price: 3.50
-    },
-    {
-        id: 3,
-        title: "how to be happy",
-        description: "this book teaches you how to be happy",
-        price: 3.50
-    },
-    ]
-))
+// store.dispatch(createBook(
+    
+// ))
 
 //CRUD 
 

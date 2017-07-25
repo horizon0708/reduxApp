@@ -1,5 +1,10 @@
 "use strict"
 
+export function getBook(){
+    return {
+        type: "GET_BOOK"
+    }
+}
 
 export function createBook(book){
     return {
