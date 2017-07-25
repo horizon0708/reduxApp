@@ -11985,14 +11985,12 @@ function booksReducers() {
             // let books = state.books.concat(action.payload);
             // return {books};
             return { books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)) };
-            break;
         case "DELETE_BOOK":
             var currentBooks = [].concat(_toConsumableArray(state.books));
             var indexToDel = currentBooks.findIndex(function (x) {
                 return x.id === action.payload.id;
             });
             return { books: [].concat(_toConsumableArray(currentBooks.slice(0, indexToDel)), _toConsumableArray(currentBooks.slice(indexToDel + 1))) };
-            break;
         case "UPDATE_BOOK":
             var currentBooksToUpdate = [].concat(_toConsumableArray(state.books));
             var indexToUpdate = currentBooksToUpdate.findIndex(function (x) {
@@ -12002,7 +12000,6 @@ function booksReducers() {
                 title: action.payload.title
             });
             return { books: [].concat(_toConsumableArray(currentBooksToUpdate.slice(0, indexToUpdate)), [BookToUpdate], _toConsumableArray(currentBooksToUpdate.slice(indexToUpdate + 1))) };
-            break;
         case "GET_BOOK":
             return _extends({}, state, { books: [].concat(_toConsumableArray(state.books)) });
     }
@@ -12032,7 +12029,6 @@ function cartReducers() {
     switch (action.type) {
         case "ADD_TO_CART":
             return { cart: [].concat(_toConsumableArray(state.cart), _toConsumableArray(action.payload)) };
-            break;
     }
     return state;
 }
@@ -24954,8 +24950,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(91);
 
-var _redux = __webpack_require__(24);
-
 var _bookActions = __webpack_require__(97);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -25030,7 +25024,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return (0, _redux.bindActionCreators)({ getBook: _bookActions.getBook }, dispatch);
+    return bindActionCreators({ getBook: _bookActions.getBook }, dispatch);
 }
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksList);
 
