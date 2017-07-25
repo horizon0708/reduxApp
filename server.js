@@ -6,6 +6,7 @@ var path = require('path');
 
 // middleware
 app.use(express.static('public'));
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 app.get('/', function(req, res){
     res.sendFile(path.resolve(__dirname,'public','index.html'))
