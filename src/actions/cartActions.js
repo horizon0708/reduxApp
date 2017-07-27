@@ -8,9 +8,17 @@ export function addToCart(book){
     }
 }
 
-export function DELETE_CART_ITEM(cart){
+export function deleteCartItem(cart){
     return {
         type: "DELETE_CART_ITEM",
         payload: cart
+    }
+}
+
+export function updateCart(_id, quantity){
+    return {
+        type: "UPDATE_CART",
+        _id: _id,
+        quantity: quantity
     }
 }
