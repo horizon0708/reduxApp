@@ -22,21 +22,21 @@ class BookForm extends React.Component{
         return(
             <Well>
                 <Panel>
-                    <FormGroup controlId="title">
+                    <FormGroup controlid="title">
                             <ControlLabel>Title</ControlLabel>
                             <FormControl 
                                 type="text"
                                 placeholder="Enter Title"
                                 ref="title" />
                     </FormGroup>
-                     <FormGroup controlId="description">
+                     <FormGroup controlid="description">
                             <ControlLabel>Description</ControlLabel>
                             <FormControl 
                                 type="text"
                                 placeholder="Enter description"
                                 ref="description" />
                     </FormGroup>
-                     <FormGroup controlId="price">
+                     <FormGroup controlid="price">
                             <ControlLabel>Price</ControlLabel>
                             <FormControl 
                                 type="text"
