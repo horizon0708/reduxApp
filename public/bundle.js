@@ -15171,17 +15171,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.addToCart = addToCart;
-exports.deleteCartItem = deleteCartItem;
 function addToCart(book) {
     return {
         type: "ADD_TO_CART",
         payload: book
-    };
-}
-function deleteCartItem(cart) {
-    return {
-        type: "DELETE_CART_ITEM",
-        payload: cart
     };
 }
 
@@ -19781,9 +19774,6 @@ function cartReducers() {
 
     switch (action.type) {
         case "ADD_TO_CART":
-            return { cart: [].concat(_toConsumableArray(state), _toConsumableArray(action.payload)) };
-            break;
-        case "DELETE_CART_ITEM":
             return { cart: [].concat(_toConsumableArray(state), _toConsumableArray(action.payload)) };
             break;
     }
@@ -43669,7 +43659,7 @@ var BookForm = function (_React$Component) {
                     null,
                     _react2.default.createElement(
                         _reactBootstrap.FormGroup,
-                        { controlid: 'title' },
+                        { controlId: 'title' },
                         _react2.default.createElement(
                             _reactBootstrap.ControlLabel,
                             null,
@@ -43682,7 +43672,7 @@ var BookForm = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         _reactBootstrap.FormGroup,
-                        { controlid: 'description' },
+                        { controlId: 'description' },
                         _react2.default.createElement(
                             _reactBootstrap.ControlLabel,
                             null,
@@ -43695,7 +43685,7 @@ var BookForm = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         _reactBootstrap.FormGroup,
-                        { controlid: 'price' },
+                        { controlId: 'price' },
                         _react2.default.createElement(
                             _reactBootstrap.ControlLabel,
                             null,
@@ -43746,13 +43736,7 @@ var _reactRedux = __webpack_require__(71);
 
 var _reactBootstrap = __webpack_require__(105);
 
-var _redux = __webpack_require__(40);
-
-var _cartActions = __webpack_require__(173);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -43770,17 +43754,6 @@ var Cart = function (_React$Component) {
     }
 
     _createClass(Cart, [{
-        key: 'onDelete',
-        value: function onDelete(id) {
-            var currentCart = [].concat(_toConsumableArray(this.props.cart));
-            var indexToDelete = currentCart.findIndex(function (x) {
-                return x.id === id;
-            });
-            var cartAfterDelete = [].concat(_toConsumableArray(currentCart.slice(0, indexToDelete)), [currentCart.slice(indexToDelete + 1)]);
-
-            this.props.deleteCartItem(cartAfterDelete);
-        }
-    }, {
         key: 'render',
         value: function render() {
             if (this.props.cart[0]) {
@@ -43797,8 +43770,6 @@ var Cart = function (_React$Component) {
     }, {
         key: 'renderCart',
         value: function renderCart() {
-            var _this2 = this;
-
             var cartItemList = this.props.cart.map(function (x) {
                 return _react2.default.createElement(
                     _reactBootstrap.Panel,
@@ -43855,14 +43826,14 @@ var Cart = function (_React$Component) {
                                 _react2.default.createElement('span', null),
                                 _react2.default.createElement(
                                     _reactBootstrap.Button,
-                                    { onClick: _this2.onDelete.bind(_this2, x.id), bsStyle: 'danger', bsSize: 'small' },
+                                    { bsStyle: 'danger', bsSize: 'small' },
                                     'DELETE'
                                 )
                             )
                         )
                     )
                 );
-            }, this);
+            });
 
             return _react2.default.createElement(
                 'div',
@@ -43885,13 +43856,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return (0, _redux.bindActionCreators)({
-        deleteCartItem: _cartActions.deleteCartItem
-    }, dispatch);
-}
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Cart);
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(Cart);
 
 /***/ })
 /******/ ]);
