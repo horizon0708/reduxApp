@@ -6,9 +6,16 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {findDOMNode} from 'react-dom';
 
-import {createBook} from '../../actions/bookActions';
+import {createBook, deleteBook} from '../../actions/bookActions';
 
 class BookForm extends React.Component{
+    onDelete(){
+        let refValue = findDOMNode(this.refs.delete).value;
+        let idRegex = /:(.*?)\]/;
+        let id = parseInt(idRegex.exec(refValue)[1], 10);
+        this.props.deleteBook(id);
+    }
+    
     handleSubmit(){
         const book= [{
             title: findDOMNode(this.refs.title).value,
@@ -19,6 +26,8 @@ class BookForm extends React.Component{
     }
     
     render(){
+        const booksList = this.props.books.map(x=> <option key={x._id}>{x.title} [ID:{x._id}]</option>)
+        
         return(
             <Well>
                 <Panel>
@@ -45,13 +54,31 @@ class BookForm extends React.Component{
                     </FormGroup>
                     <Button onClick={this.handleSubmit.bind(this)} bsStyle="primary"> Save! </Button>
                 </Panel>
+                <Panel style={{marginTop: '25px'}}>
+                    <FormGroup controlId='formControlsSelect'>
+                        <ControlLabel>Select a book to delete</ControlLabel>
+                        <FormControl ref="delete" componentClass='select' placeholder='select'>
+                            <option value='select'>select</option>
+                            {booksList}
+                        </FormControl>
+                    </FormGroup>
+                    <Button onClick={(e)=>this.onDelete(e)} bsStyle="danger">
+                        Delete Book!
+                    </Button>
+                </Panel>
             </Well>
         )
     }
 }
-
-function mapDispatchToProps(dispatch){
-    return bindActionCreators({createBook}, dispatch);
+function mapStateToProps(state){
+    return {
+        books: state.books.books
+    }
 }
 
-export default connect(null, mapDispatchToProps)(BookForm);
+
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({createBook, deleteBook}, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookForm);
