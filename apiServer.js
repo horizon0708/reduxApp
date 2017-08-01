@@ -160,8 +160,9 @@ app.put('/books/:_id', function (req, res) {
   var update = {
     '$set': {
       title: book.title,
+      author: book.author,
       description: book.description,
-      image: book.image,
+      images: book.images,
       price: book.price
     }
   };

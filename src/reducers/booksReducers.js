@@ -21,9 +21,10 @@ export function booksReducers(state = {books: [ ]}, action) {
                 author: action.payload.author,
                 description: action.payload.description,
                 images: action.payload.images,
-                price: action.payload.price
+                price: action.payload.price,
+                _id: action.payload._id
             }
-            return {books: [...currentBooksToUpdate.slice(0,indexToUpdate), BookToUpdate, ...currentBooksToUpdate.slice(indexToUpdate + 1)]}
+            return {...state, books: [...currentBooksToUpdate.slice(0,indexToUpdate), BookToUpdate, ...currentBooksToUpdate.slice(indexToUpdate + 1)]}
             break;
         case "GET_BOOK":
             return {...state, books:[...action.payload]}

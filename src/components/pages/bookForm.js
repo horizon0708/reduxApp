@@ -1,7 +1,7 @@
 "use strict"
 
 import React from 'react';
-import { MenuItem, InputGroup, DropdownButton, Image, Col, Row, Well, Panel, FormControl, FormGroup, ControlLabel, Button, ButtonToolbar } from 'react-bootstrap';
+import { Collapse, Alert, MenuItem, InputGroup, DropdownButton, Image, Col, Row, Well, Panel, FormControl, FormGroup, ControlLabel, Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { findDOMNode } from 'react-dom';
@@ -18,8 +18,8 @@ class BookForm extends React.Component {
         this.state = {
             preview: '',
             currentBook: '',
-            isEditing: false,
-            priceValidation: null
+            priceValidation: null,
+            alert: false
         }
     }
     onDrop(acc) {
@@ -35,22 +35,22 @@ class BookForm extends React.Component {
     }
 
     onEdit() {
-        if (this.state.preview){
+        if (this.state.preview) {
             this.uploadFile(this.state.preview, false);
-        }  else if(this.state.currentBook){
+        } else if (this.state.currentBook) {
             this.updateBook(this.state.currentBook.images)
         } else {
             this.updateBook('');
-        }  
+        }
     }
 
-    updateBook(imagePath){
+    updateBook(imagePath) {
         const id = this.state.currentBook._id;
         const updatedBook = {
             title: findDOMNode(this.refs.title).value,
             author: findDOMNode(this.refs.author).value,
             description: findDOMNode(this.refs.description).value,
-            images:  imagePath,
+            images: imagePath,
             price: findDOMNode(this.refs.price).value,
         }
         this.props.updateBook(id, updatedBook);
@@ -108,8 +108,8 @@ class BookForm extends React.Component {
             .then(response => {
                 const data = response.data;
                 const filename = data.filename;
-                if (create === true){
-                    this.createBook(filename);  
+                if (create === true) {
+                    this.createBook(filename);
                 } else {
                     this.updateBook(filename);
                 }
@@ -128,6 +128,7 @@ class BookForm extends React.Component {
             price: findDOMNode(this.refs.price).value,
         }]
         this.props.createBook(book);
+        this.showAlert();
     }
 
     componentDidMount() {
@@ -201,17 +202,40 @@ class BookForm extends React.Component {
         }
     }
 
+    showAlert(){
+        this.setState({alert: true},()=>{
+            setTimeout(()=>this.setState({alert: false}), 2000)
+        })
+        
+    }
+
+    renderAlert(string) {
+        return <Col xs={12} sm={10} smOffset={1}>
+                                        <Alert bsStyle="success">
+                                            {string} has been successful.
+                                        </Alert>
+                                    </Col>
+    }
+
     render() {
-        const booksList = this.props.books.map(x => <option key={x._id}>{x.title} [ID:{x._id}]</option>)
+        const booksList = this.props.books.map((x) => <option key={x._id}>{x.title} [ID:{x._id}]</option>)
 
 
         return (
             <Row>
                 <Col>
                     <Well>
-                    <Row>
-                        <Col xs={12} sm={5} smOffset={1}>
-                           
+
+                        <Row>
+                            
+                            <Collapse in={this.state.alert}>
+                                <div>
+                                    {this.renderAlert("add")}
+                                </div>
+                            </Collapse>
+                            
+
+                            <Col xs={12} sm={5} smOffset={1}>
                                 <Panel>
                                     <FormGroup controlId='formControlsSelect'>
                                         <ControlLabel>Pick a book to edit/delete</ControlLabel>
@@ -232,11 +256,11 @@ class BookForm extends React.Component {
                                     </Dropzone>
 
                                 </Panel>
-                            
 
-                        </Col>
-                        <Col xs={12} sm={5}>
-                            
+
+                            </Col>
+                            <Col xs={12} sm={5}>
+
                                 <Panel>
                                     <FormGroup controlId="title" validationState={this.props.validation}>
                                         <ControlLabel>Title</ControlLabel>
@@ -276,8 +300,8 @@ class BookForm extends React.Component {
                                     </ButtonToolbar>
 
                                 </Panel>
-                        </Col>
-                    </Row>
+                            </Col>
+                        </Row>
                     </Well>
                 </Col>
             </Row>

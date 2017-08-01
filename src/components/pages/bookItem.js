@@ -43,11 +43,12 @@ class BookItem extends React.Component {
         return (
             <Well>
                 <Row>
-                    <Col xs={12} sm={4}>
-                        <Image src={"images/"+ this.props.images} responsive />
+                    <Col xs={6} sm={5}>
+                        <Image style={{paddingTop: "12px"}} src={"images/"+ this.props.images} responsive />
                     </Col>
-                    <Col xs={12} sm={8} >
-                        <h6>{this.props.title}</h6>
+                    <Col xs={6} sm={7} >
+                        <h4>{this.props.title}</h4>
+                        <p>by {this.props.author}</p>
                         <p>{this.props.description.length > 50 && this.state.isClicked === false ? 
                             this.props.description.substring(0, 50): this.props.description}
                             <button className='link' onClick={this.onReadMore.bind(this)}>
@@ -55,8 +56,8 @@ class BookItem extends React.Component {
                                 && this.props.description.length > 50 ? ('... read more'): '' }
                                 </button>
                             </p>
-                        <h6>{this.props.price} schmeckles</h6>
-                        <Button onClick={this.handleCart.bind(this)} bsStyle='primary'> Buy Now</Button>
+                        <p><strong>{this.props.price} schmeckles</strong></p>
+                        <Button style={{float: "right"}}onClick={this.handleCart.bind(this)} bsStyle='primary' bsSize='small'> Add to Cart</Button>
                     </Col>
                 </Row>
             </Well>

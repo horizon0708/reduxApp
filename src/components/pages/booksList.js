@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getBook } from '../../actions/bookActions';
 import BookItem from './bookItem';
-import { Carousel, Grid, Col, Row, Button } from 'react-bootstrap';
+import { Jumbotron, Grid, Col, Row, Button } from 'react-bootstrap';
 import BookForm from './bookForm';
 import Cart from './cart';
 
@@ -19,10 +19,11 @@ class BooksList extends React.Component {
         const booksList = this.props.books.map(x => {
             return (
 
-                <Col xs={12} sm={6} key={x._id}>
+                <Col xs={12} sm={6} md={4} key={x._id}>
                     <BookItem
                         _id={x._id}
                         title={x.title}
+                        author={x.author}
                         description={x.description}
                         images={x.images}
                         price={x.price} />
@@ -32,24 +33,16 @@ class BooksList extends React.Component {
         return (
             <Grid>
                 <Row>
-                    <Carousel>
-                        <Carousel.Item>
-                            <img width={300} height={100} alt="900x500" src="/images/lovelive.png" />
-                            <Carousel.Caption>
-                                <h3>Love Live</h3>
-                                <p>DO you Love Love Live?</p>
-                            </Carousel.Caption>
-                        </Carousel.Item>
-                        <Carousel.Item>
-                            <img width={300} height={100} alt="900x500" src="/images/despair.jpg" />
-                            <Carousel.Caption>
-                                <h3>Marika</h3>
-                                <p>2nd best grill after Haru.</p>
-                            </Carousel.Caption>
-                        </Carousel.Item>
-                    </Carousel>
+                    <Col xs={12} style={{marginTop: "20px"}}>
+                        <Jumbotron>
+                        <h1>Hello, world!</h1>
+                        <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                        <p><Button bsStyle="primary">Learn more</Button></p>
+                    </Jumbotron>
+                    </Col>
+                    
                 </Row>
-                <Row style={{margineTop: '15px'}}>
+                <Row style={{ margineTop: '15px' }}>
                     <Col>
                         {booksList}
 
