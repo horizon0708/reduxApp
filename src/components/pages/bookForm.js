@@ -17,21 +17,23 @@ class BookForm extends React.Component {
         super();
         this.state = {
             images: [{}],
-            img: ''
+            img: '',
+            preview: ''
         }
     }
     onDrop(acc) {
         //console.log(acc);
-        var file = new FormData();
-        file.append('image', acc[0])
-        axios.post('/api/upload/', file)
-            .then(response => {
-                const data = response.data;
-                console.log(data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        this.setState({preview: acc[0]});
+        // var file = new FormData();
+        // file.append('image', acc[0])
+        // axios.post('/api/upload/', file)
+        //     .then(response => {
+        //         const data = response.data;
+        //         console.log(data);
+        //     })
+        //     .catch(err => {
+        //         console.log(err);
+        //     })
     }
 
     componentDidMount() {
@@ -107,15 +109,13 @@ class BookForm extends React.Component {
                         <Image src={this.state.img} responsive />
                     </Panel>
                     <Panel>
-                        <form action="/api/upload" method="POST" encType="multipart/form-data">
-                            Select an image to upload:
-                            <input type="file" name="image" />
-                            <input type="submit" value="Upload Image" />
-                        </form>
-
-                        <Dropzone onDrop={this.onDrop.bind(this)}>
+                        <Dropzone 
+                            onDrop={this.onDrop.bind(this)}
+                            multiple={false}>
                             <div>Try dropping some files here, or click to select files to upload.</div>
+                            <Image src={this.state.preview.preview} responsive />
                         </Dropzone>
+                        
                     </Panel>
                 </Col>
                 <Col xs={12} sm={6}>
