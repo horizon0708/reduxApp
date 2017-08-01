@@ -1,7 +1,7 @@
 "use strict"
 
 import React from 'react';
-import { MenuItem, InputGroup, DropdownButton, Image, Col, Row, Well, Panel, FormControl, FormGroup, ControlLabel, Button } from 'react-bootstrap';
+import { MenuItem, InputGroup, DropdownButton, Image, Col, Row, Well, Panel, FormControl, FormGroup, ControlLabel, Button, ButtonToolbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { findDOMNode } from 'react-dom';
@@ -16,21 +16,25 @@ class BookForm extends React.Component {
     constructor() {
         super();
         this.state = {
-            images: [{}],
+            preview: '',
             currentBook: '',
             isEditing: false,
             priceValidation: null
         }
     }
     onDrop(acc) {
-        this.setState({ img: acc[0] });
+        this.setState({ preview: acc[0] });
+    }
+
+    test() {
+        console.log(findDOMNode(this.refs.upload).value)
     }
 
     onAdd() {
-        this.state.isEditing === false ? uploadFile(this.state.img) : null;
+        this.state.preview ? this.uploadFile(this.state.preview) : console.log("populate the fields");
     }
 
-    onEdit(){
+    onEdit() {
         return null;
     }
 
@@ -47,7 +51,7 @@ class BookForm extends React.Component {
         let refValue = findDOMNode(this.refs.price).value;
         var regex = /^[0-9]+$/;
         if (refValue === '') {
-            this.setState({priceValidation: null})
+            this.setState({ priceValidation: null })
         } else {
             if (refValue.match(regex)) {
                 this.setState({ priceValidation: "success" });
@@ -66,21 +70,22 @@ class BookForm extends React.Component {
             console.log('setting img to zero')
             this.setState({
                 currentBook: '',
-                isEditing: false
-            },()=>{
+                preview: undefined
+            }, () => {
                 this.resetForm();
             });
         } else {
             let id = idRegex.exec(refValue)[1];
             console.log('fetching book')
+            this.setState({ preview: undefined });
             this.props.fetchBook(id);
-            
+
         }
     }
 
     uploadFile(acc) {
         var file = new FormData();
-        file.append('image', acc[0])
+        file.append('image', acc)
         axios.post('/api/upload/', file)
             .then(response => {
                 const data = response.data;
@@ -95,6 +100,7 @@ class BookForm extends React.Component {
     createBook(imagePath) {
         const book = [{
             title: findDOMNode(this.refs.title).value,
+            author: findDOMNode(this.refs.author).value,
             description: findDOMNode(this.refs.description).value,
             images: imagePath,
             price: findDOMNode(this.refs.price).value,
@@ -120,10 +126,12 @@ class BookForm extends React.Component {
     }
 
     onDelete() {
-        let refValue = findDOMNode(this.refs.delete).value;
+        let refValue = findDOMNode(this.refs.bookSelect).value;
         let idRegex = /:(.*?)\]/;
-        let id = idRegex.exec(refValue)[1];
-        this.props.deleteBook(id);
+        if (idRegex.exec(refValue) !== null) {
+            let id = idRegex.exec(refValue)[1];
+            this.props.deleteBook(id);
+        }
     }
 
     renderImages() {
@@ -154,9 +162,20 @@ class BookForm extends React.Component {
     }
 
     renderPreview() {
+        if (this.state.preview !== undefined) {
+            return <Image style={imgStyle} src={this.state.preview.preview} responsive />
+        }
+
         if (this.props.book) {
-            console.log(this.props.book);
-            return <Image src={this.state.currentBook ? "images/" + this.state.currentBook.images : null} responsive />
+            return <Image style={imgStyle} src={this.state.currentBook ? "images/" + this.state.currentBook.images : null} responsive />
+        }
+    }
+
+    renderDeleteBtn() {
+        if (this.state.currentBook) {
+            return <Button onClick={(e) => this.onDelete(e)} bsStyle="danger">
+                Delete Book!
+                                    </Button>
         }
     }
 
@@ -167,39 +186,35 @@ class BookForm extends React.Component {
         return (
             <Row>
                 <Col>
+                    <Well>
                     <Row>
-                        <Col xs={12} sm={6}>
-                            <Well>
+                        <Col xs={12} sm={5} smOffset={1}>
+                           
                                 <Panel>
                                     <FormGroup controlId='formControlsSelect'>
-                                        <ControlLabel>Select a book to delete</ControlLabel>
+                                        <ControlLabel>Pick a book to edit/delete</ControlLabel>
                                         <FormControl onChange={this.handleChange.bind(this)} ref="bookSelect" componentClass='select' placeholder='select'>
                                             <option value='select'> Create a new book </option>
                                             {booksList}
                                         </FormControl>
                                     </FormGroup>
                                 </Panel>
-                            </Well>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={12} sm={6}>
-                            <Well>
+
                                 <Panel>
                                     <Dropzone
+                                        style={dropzoneStyle}
                                         onDrop={this.onDrop.bind(this)}
                                         multiple={false}>
                                         <div>Try dropping some files here, or click to select files to upload.</div>
-                                        <Image src={this.state.currentBook.preview} responsive />
                                         {this.renderPreview()}
                                     </Dropzone>
 
                                 </Panel>
-                            </Well>
+                            
 
                         </Col>
-                        <Col xs={12} sm={6}>
-                            <Well>
+                        <Col xs={12} sm={5}>
+                            
                                 <Panel>
                                     <FormGroup controlId="title" validationState={this.props.validation}>
                                         <ControlLabel>Title</ControlLabel>
@@ -230,32 +245,39 @@ class BookForm extends React.Component {
                                             onChange={this.priceValidation.bind(this)} />
                                         <FormControl.Feedback />
                                     </FormGroup>
-                                    <Button onClick={this.state.currentBook ? this.onEdit.bind(this) : this.onAdd.bind(this)}
-                                        bsStyle={this.state.currentBook ? "primary" : "info"}
-                                    > {this.state.currentBook ? "Edit book" : "Create new book"}</Button>
+                                    <ButtonToolbar>
+                                        <Button onClick={this.state.currentBook ? this.onEdit.bind(this) : this.onAdd.bind(this)}
+                                            bsStyle={this.state.currentBook ? "primary" : "info"}
+                                        > {this.state.currentBook ? "Edit book" : "Create new book"}</Button>
+
+                                        {this.renderDeleteBtn()}
+                                    </ButtonToolbar>
+
                                 </Panel>
-                                <Panel style={{ marginTop: '25px' }}>
-                                    <FormGroup controlId='formControlsSelect'>
-                                        <ControlLabel>Select a book to delete</ControlLabel>
-                                        <FormControl ref="delete" componentClass='select' placeholder='select'>
-                                            <option value='select'>select</option>
-                                            {booksList}
-                                        </FormControl>
-                                    </FormGroup>
-                                    <Button onClick={(e) => this.onDelete(e)} bsStyle="danger">
-                                        Delete Book!
-                                    </Button>
-                                </Panel>
-                            </Well>
                         </Col>
                     </Row>
+                    </Well>
                 </Col>
             </Row>
-
-
         )
     }
 }
+
+const dropzoneStyle = {
+    width: "100%",
+    minHeight: 400,
+    borderWidth: 2,
+    borderColor: '#666',
+    borderStyle: 'dashed',
+    borderRadius: 5
+}
+
+const imgStyle = {
+    "padding": "20px 20px 20px 20px"
+}
+
+
+
 function mapStateToProps(state) {
     return {
         books: state.books.books,
