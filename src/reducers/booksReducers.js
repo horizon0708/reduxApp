@@ -28,6 +28,8 @@ export function booksReducers(state = {books: [ ]}, action) {
             return {...state, msg:'Please try again', style: 'danger', validation: 'error'}
         case "RESET_BUTTON":
             return {...state, msg:null, style: 'primary', validation: null}
+        case "FETCH_BOOK": // fetch with id    
+            return {...state, curBook: action.payload} 
     }
     return state
 }

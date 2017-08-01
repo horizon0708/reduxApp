@@ -38,6 +38,7 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "serve-favicon": "~2.4.2",
+    "sharp": "^0.18.2",
     "webpack": "^3.3.0"
   },
   "devDependencies": {

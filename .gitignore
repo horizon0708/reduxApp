@@ -1,4 +1,6 @@
 node_modules/
+.apiServer.js
+
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

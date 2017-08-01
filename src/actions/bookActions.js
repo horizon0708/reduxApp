@@ -6,7 +6,6 @@ export function getBook(){
     return (dispatch)=>{
         axios.get("/api/books")
             .then(response=>{
-                //console.log(response.data);
                 dispatch({type:"GET_BOOK", payload:response.data})
             })
             .catch(err=>{
@@ -33,7 +32,6 @@ export function createBook(book){
 }
 
 export function deleteBook(id){
-    console.log(id);
     return dispatch => {
         axios.delete("/api/books/" + id)
         .then(response =>{
@@ -55,5 +53,13 @@ export function updateBook(book){
 export function resetButton(){
     return {
         type: "RESET_BUTTON"
+    }
+}
+
+export function fetchBook(id){
+    return dispatch => {
+        axios.get('/api/books/' + id)
+        .then(res=> dispatch({type:"FETCH_BOOK", payload: res.data}))
+        .catch(err=> dispatch({type:"FETCH_BOOK_ERROR", payload: err}))
     }
 }

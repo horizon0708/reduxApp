@@ -125,6 +125,21 @@ app.get('/books', function (req, res) {
   })
 });
 
+// FETCH BOOK BY ID
+var ObjectId = require('mongodb').ObjectID;
+
+app.get('/books/:_id', function (req,res){
+  var query = {_id: new ObjectId(req.params._id) }
+  
+  Books.findOne(query, function(err ,book){
+    if(err){
+      console.log(err)
+    }
+    res.json(book);
+  })
+})
+
+
 // DELETE
 
 app.delete('/books/:_id', function (req, res) {

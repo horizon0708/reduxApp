@@ -44,7 +44,7 @@ class BookItem extends React.Component {
             <Well>
                 <Row>
                     <Col xs={12} sm={4}>
-                        <Image src={this.props.images} responsive />
+                        <Image src={"images/"+ this.props.images} responsive />
                     </Col>
                     <Col xs={12} sm={8} >
                         <h6>{this.props.title}</h6>
@@ -55,7 +55,7 @@ class BookItem extends React.Component {
                                 && this.props.description.length > 50 ? ('... read more'): '' }
                                 </button>
                             </p>
-                        <h6>usd. {this.props.price}</h6>
+                        <h6>{this.props.price} schmeckles</h6>
                         <Button onClick={this.handleCart.bind(this)} bsStyle='primary'> Buy Now</Button>
                     </Col>
                 </Row>
