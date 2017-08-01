@@ -6,8 +6,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { findDOMNode } from 'react-dom';
 import axios from 'axios';
-
 import { createBook, deleteBook, getBook, resetButton } from '../../actions/bookActions';
+
+import Dropzone from 'react-dropzone';
+import FormData from 'form-data';
+
 
 class BookForm extends React.Component {
     constructor() {
@@ -17,6 +20,20 @@ class BookForm extends React.Component {
             img: ''
         }
     }
+    onDrop(acc) {
+        //console.log(acc);
+        var file = new FormData();
+        file.append('image', acc[0])
+        axios.post('/api/upload/', file)
+            .then(response => {
+                const data = response.data;
+                console.log(data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
     componentDidMount() {
         this.props.getBook();
         axios.get('/api/images/')
@@ -89,6 +106,17 @@ class BookForm extends React.Component {
                         </InputGroup>
                         <Image src={this.state.img} responsive />
                     </Panel>
+                    <Panel>
+                        <form action="/api/upload" method="POST" encType="multipart/form-data">
+                            Select an image to upload:
+                            <input type="file" name="image" />
+                            <input type="submit" value="Upload Image" />
+                        </form>
+
+                        <Dropzone onDrop={this.onDrop.bind(this)}>
+                            <div>Try dropping some files here, or click to select files to upload.</div>
+                        </Dropzone>
+                    </Panel>
                 </Col>
                 <Col xs={12} sm={6}>
                     <Well>
@@ -99,7 +127,7 @@ class BookForm extends React.Component {
                                     type="text"
                                     placeholder="Enter Title"
                                     ref="title" />
-                                    <FormControl.Feedback />
+                                <FormControl.Feedback />
                             </FormGroup>
                             <FormGroup controlId="description" validationState={this.props.validation}>
                                 <ControlLabel>Description</ControlLabel>
@@ -107,7 +135,7 @@ class BookForm extends React.Component {
                                     type="text"
                                     placeholder="Enter description"
                                     ref="description" />
-                                    <FormControl.Feedback />
+                                <FormControl.Feedback />
                             </FormGroup>
                             <FormGroup controlId="price" validationState={this.props.validation}>
                                 <ControlLabel>Price</ControlLabel>
@@ -115,9 +143,9 @@ class BookForm extends React.Component {
                                     type="text"
                                     placeholder="Enter Price"
                                     ref="price" />
-                                    <FormControl.Feedback />
+                                <FormControl.Feedback />
                             </FormGroup>
-                            <Button onClick={!this.props.msg? this.handleSubmit.bind(this): this.resetForm.bind(this)}
+                            <Button onClick={!this.props.msg ? this.handleSubmit.bind(this) : this.resetForm.bind(this)}
                                 bsStyle={!this.props.style ? "primary" : this.props.style}
                             > {!this.props.msg ? "Save book" : this.props.msg}</Button>
                         </Panel>

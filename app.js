@@ -8,6 +8,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var app = express();
 var requestHandler = require('./requestHandler');
+var uploads = require('./routes/uploads');
+
 
 //proxy
 var httpProxy = require('http-proxy');
@@ -18,6 +20,7 @@ const apiProxy = httpProxy.createProxyServer({
 app.use('/api', function(req,res){
   apiProxy.web(req, res);
 })
+
 
 
 // view engine setup
