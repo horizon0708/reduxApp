@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { findDOMNode } from 'react-dom';
 import axios from 'axios';
-import { fetchBook, createBook, deleteBook, getBook, resetButton } from '../../actions/bookActions';
+import { updateBook, fetchBook, createBook, deleteBook, getBook, resetButton } from '../../actions/bookActions';
 
 import Dropzone from 'react-dropzone';
 import FormData from 'form-data';
@@ -31,11 +31,29 @@ class BookForm extends React.Component {
     }
 
     onAdd() {
-        this.state.preview ? this.uploadFile(this.state.preview) : console.log("populate the fields");
+        this.state.preview ? this.uploadFile(this.state.preview, true) : console.log("populate the fields");
     }
 
     onEdit() {
-        return null;
+        if (this.state.preview){
+            this.uploadFile(this.state.preview, false);
+        }  else if(this.state.currentBook){
+            this.updateBook(this.state.currentBook.images)
+        } else {
+            this.updateBook('');
+        }  
+    }
+
+    updateBook(imagePath){
+        const id = this.state.currentBook._id;
+        const updatedBook = {
+            title: findDOMNode(this.refs.title).value,
+            author: findDOMNode(this.refs.author).value,
+            description: findDOMNode(this.refs.description).value,
+            images:  imagePath,
+            price: findDOMNode(this.refs.price).value,
+        }
+        this.props.updateBook(id, updatedBook);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -53,7 +71,7 @@ class BookForm extends React.Component {
         if (refValue === '') {
             this.setState({ priceValidation: null })
         } else {
-            if (refValue.match(regex)) {
+            if (refValue.match(regex) && regex.exec(refValue) < 100000) {
                 this.setState({ priceValidation: "success" });
             }
             else {
@@ -83,14 +101,18 @@ class BookForm extends React.Component {
         }
     }
 
-    uploadFile(acc) {
+    uploadFile(acc, create) {
         var file = new FormData();
         file.append('image', acc)
         axios.post('/api/upload/', file)
             .then(response => {
                 const data = response.data;
                 const filename = data.filename;
-                this.createBook(filename);
+                if (create === true){
+                    this.createBook(filename);  
+                } else {
+                    this.updateBook(filename);
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -290,7 +312,7 @@ function mapStateToProps(state) {
 
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ fetchBook, createBook, deleteBook, getBook, resetButton }, dispatch);
+    return bindActionCreators({ updateBook, fetchBook, createBook, deleteBook, getBook, resetButton }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookForm);

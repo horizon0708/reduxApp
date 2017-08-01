@@ -43,10 +43,11 @@ export function deleteBook(id){
     }
 }
 
-export function updateBook(book){
-    return {
-        type: "UPDATE_BOOK",
-        payload: book
+export function updateBook(id, book){
+    return dispatch => {
+        axios.put("/api/books/"+ id, book)
+        .then(res=>dispatch({type:"UPDATE_BOOK", payload: res.data}))
+        .catch(err=> dispatch({type:"FETCH_BOOK_ERROR", payload: err}));
     }
 }
 
