@@ -6,7 +6,7 @@ class Footer extends React.Component{
         return(
             <footer className="footer text-center">
                 <div className="container">
-                    <p className="footer-text"> asdf </p>
+                    <p className="footer-text"> Made with React-Bootstrap + Redux. </p>
                 </div>
             </footer>
         );

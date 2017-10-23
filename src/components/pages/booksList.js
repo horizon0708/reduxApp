@@ -35,9 +35,8 @@ class BooksList extends React.Component {
                 <Row>
                     <Col xs={12} style={{marginTop: "20px"}}>
                         <Jumbotron>
-                        <h1>Hello, world!</h1>
-                        <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-                        <p><Button bsStyle="primary">Learn more</Button></p>
+                        <h1>Bookstore 2049</h1>
+                        <p>Books can be exchanged for goods and services</p>
                     </Jumbotron>
                     </Col>
                     
